@@ -2,7 +2,6 @@ package ma.enset.inventoryservice.query.controllers;
 
 import com.example.commonapi.queries.GetAllProducts;
 import com.example.commonapi.queries.GetProductById;
-import ma.enset.inventoryservice.query.entities.Category;
 import ma.enset.inventoryservice.query.entities.Product;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;

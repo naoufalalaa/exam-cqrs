@@ -1,6 +1,7 @@
 package ma.enset.customerservice.query.service;
 
 import com.example.commonapi.events.ClientCreatedEvent;
+import com.example.commonapi.events.CustomerDeletedEvent;
 import com.example.commonapi.queries.GetAllCustomers;
 import com.example.commonapi.queries.GetCustomerById;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,12 @@ public class ClientQueryHandler {
         client.setAddress(event.getAddress());
         client.setPhone(event.getPhone());
         clientRepository.save(client);
+    }
+
+    @EventHandler
+    public void on(CustomerDeletedEvent event){
+        log.info("Customer deleted event received: {}");
+        clientRepository.deleteById(event.getId());
     }
     @QueryHandler
     public Client on(GetCustomerById query){

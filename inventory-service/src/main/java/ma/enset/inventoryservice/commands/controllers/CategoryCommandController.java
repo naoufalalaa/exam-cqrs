@@ -34,7 +34,6 @@ public class CategoryCommandController {
     @PutMapping(path = "/update")
     public CompletableFuture<String> updateCategory(@RequestBody UpdateCategoryRequestDTO updateCategoryRequestDTO) {
         return commandGateway.send(new UpdateCategoryCommand(
-                UUID.randomUUID().toString(),
                 updateCategoryRequestDTO.getId(),
                 updateCategoryRequestDTO.getName(),
                 updateCategoryRequestDTO.getDescription()

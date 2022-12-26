@@ -1,7 +1,9 @@
 package ma.enset.customerservice.commands.aggregates;
 
 import com.example.commonapi.commands.CreateCustomerCommand;
+import com.example.commonapi.commands.DeleteCustomerCommand;
 import com.example.commonapi.events.ClientCreatedEvent;
+import com.example.commonapi.events.CustomerDeletedEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -43,5 +45,15 @@ public class ClientAggregate {
         this.email = event.getEmail();
         this.phone = event.getPhone();
         this.address = event.getAddress();
+    }
+
+    @CommandHandler
+    public void on(DeleteCustomerCommand command) {
+        AggregateLifecycle.apply(new CustomerDeletedEvent(command.getId()));
+    }
+
+    @EventSourcingHandler
+    public void on(CustomerDeletedEvent event) {
+        AggregateLifecycle.markDeleted();
     }
 }

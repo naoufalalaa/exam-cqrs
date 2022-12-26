@@ -1,12 +1,10 @@
 package ma.enset.customerservice.commands.controllers;
 
 import com.example.commonapi.commands.CreateCustomerCommand;
+import com.example.commonapi.commands.DeleteCustomerCommand;
 import com.example.commonapi.dtos.CreateCustomerRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -29,6 +27,12 @@ public class CustomerCommandController {
                 createCustomerRequestDTO.getPhone(),
                 createCustomerRequestDTO.getAddress()
         ));
+        return response;
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public CompletableFuture<String> deleteCustomer(@PathVariable String id) {
+        CompletableFuture<String> response = commandGateway.send(new DeleteCustomerCommand(id));
         return response;
     }
 }
