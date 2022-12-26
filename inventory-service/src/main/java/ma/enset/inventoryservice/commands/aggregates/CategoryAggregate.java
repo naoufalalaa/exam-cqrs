@@ -1,9 +1,9 @@
 package ma.enset.inventoryservice.commands.aggregates;
 
-import com.example.commonapi.commands.CreateCategoryCommand;
-import com.example.commonapi.commands.CreateCustomerCommand;
-import com.example.commonapi.commands.CreateProductCommand;
+import com.example.commonapi.commands.*;
 import com.example.commonapi.events.CategoryCreatedEvent;
+import com.example.commonapi.events.CategoryDeletedEvent;
+import com.example.commonapi.events.CategoryUpdatedEvent;
 import com.example.commonapi.events.ClientCreatedEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -39,5 +39,33 @@ public class CategoryAggregate {
         this.id = event.getId();
         this.name = event.getName();
         this.description = event.getDescription();
+    }
+
+    @CommandHandler
+    //update
+    public void handle(UpdateCategoryCommand command) {
+        if (command.getName() == null || command.getName().isEmpty() || command.getDescription() == null || command.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("No field can be empty");
+        }
+        AggregateLifecycle.apply(new CategoryUpdatedEvent(
+                command.getId(),
+                command.getName(),
+                command.getDescription()));
+    }
+
+    @EventSourcingHandler
+    public void on(CategoryUpdatedEvent event) {
+        this.id = event.getId();
+        this.name = event.getName();
+        this.description = event.getDescription();
+    }
+    @CommandHandler
+    public void on(DeleteCategoryCommand command) {
+        //delete
+        AggregateLifecycle.apply(new CategoryDeletedEvent(command.getId()));
+    }
+    @EventSourcingHandler
+    public void on(CategoryDeletedEvent event) {
+        AggregateLifecycle.markDeleted();
     }
 }

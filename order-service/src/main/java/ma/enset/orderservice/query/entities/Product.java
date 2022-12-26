@@ -1,6 +1,6 @@
-package ma.enset.inventoryservice.query.entities;
+package ma.enset.orderservice.query.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +14,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class Product {
     @Id
     private String id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "category")
-    private List<Product> product;
+    private double price;
+    private int quantity;
+    @OneToMany(mappedBy = "product")
+    private List<LigneCommand> ligneCommand;
 }

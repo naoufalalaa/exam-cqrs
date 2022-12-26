@@ -2,6 +2,7 @@ package ma.enset.inventoryservice.query.service;
 
 import com.example.commonapi.enums.StateProduct;
 import com.example.commonapi.events.CategoryCreatedEvent;
+import com.example.commonapi.events.CategoryDeletedEvent;
 import com.example.commonapi.events.CategoryUpdatedEvent;
 import com.example.commonapi.events.ProductCreatedEvent;
 import com.example.commonapi.queries.GetAllCategories;
@@ -44,6 +45,19 @@ public class CategoryQueryHandler {
                 category.setName(event.getName());
                 category.setDescription(event.getDescription());
                 categoryRepository.save(category);
+            }
+        }
+        else{
+            throw new ExceptionInInitializerError("Category not found");
+        }
+    }
+    @EventHandler
+    public void on(CategoryDeletedEvent event){
+        if(event.getId() != null){
+            log.info("Category deleted event received: {}");
+            Category category = categoryRepository.findById(event.getId()).orElse(null);
+            if(category != null){
+                categoryRepository.delete(category);
             }
         }
         else{
